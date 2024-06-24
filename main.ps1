@@ -13,8 +13,6 @@ foreach ($dir in $directories)
     }
 }
 
-$displayName = "Block Discord from contacting Spotify"
-
 # 2> $null redirects any errors to be sent to hell (null) so no stinky error pops up
 $firewallRuleExists = Get-NetFirewallRule -DisplayName $displayName 2> $null
 if ($firewallRuleExists)
@@ -23,5 +21,9 @@ if ($firewallRuleExists)
     Remove-NetFirewallRule -DisplayName $displayName
 }
 
-New-NetFirewallRule -DisplayName $displayName -Description "Blocks discord from contacting spotify so it can't pause your music. Created automatically by Discord Anti-Pauser." -Direction Outbound -LocalPort Any -RemoteAddress "35.186.224.24" -Action Block -Program $fullDiscordPath
+$displayName = "Block Discord from contacting Spotify"
+$description = "Blocks discord from contacting spotify so it can't pause your music. Created automatically by Discord Anti-Pauser."
+$spotifyServerAddress = "35.186.224.24"
+
+New-NetFirewallRule -DisplayName $displayName -Description $description -Direction Outbound -LocalPort Any -RemoteAddress $spotifyServerAddress -Action Block -Program $fullDiscordPath
 Write-Host "Created firewall rule"

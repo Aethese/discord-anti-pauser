@@ -1,5 +1,5 @@
 # Spotify Anti-Pauser
-Uses the power of the Windows firewall to block Discord from pausing Spotify if your mic has been on for 30 seconds straight.
+Uses the power of the Windows firewall to block Discord from pausing Spotify if your mic has been on for 30 seconds straight. This is made for those of us who love singing in voice chat, but Discord keeps hating on us :(
 
 ## Imporant notes
 Spotify Anti-Pauser creates a Firewall rule that blocks Discord from contacting Spotify's servers so they can't pause your music.

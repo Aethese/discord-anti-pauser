@@ -25,9 +25,3 @@ powershell -ExecutionPolicy Bypass -File main.ps1
 #### Run normally from Powershell
 1. Open Powershell as admin and open the path that you the project is held in
 2. Run the Powershell script by running `./main.ps1`
-
-# Please read!
-This script (at least currently) doesn't get the latest file path for any future Discord updates. At this moment the program requires manual updating for every Discord update. So if the file path is out of date, create an [issue](https://github.com/Aethese/discord-anti-pauser/issues/new) or you can manually update it yourself.
-
-## Discord installed on separate drive?
-Unfortunately, the script doesn't support having Discord installed on a separate drive. However, you can try editing the file path in the script if you're comfortable doing so.

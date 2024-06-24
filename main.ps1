@@ -1,6 +1,10 @@
 $discordPath = "$env:localappdata\Discord"
 $directories = Get-ChildItem -Path $discordPath -Directory
 
+$displayName = "Block Discord from contacting Spotify"
+$description = "Blocks discord from contacting spotify so it can't pause your music. Created automatically by Discord Anti-Pauser."
+$spotifyServerAddress = "35.186.224.24"
+
 foreach ($dir in $directories)
 {
     # checks if the directories
@@ -9,6 +13,7 @@ foreach ($dir in $directories)
     if (!($empty))
     {
         $fullDiscordPath = $discordPath + $dir + "\Discord.exe"
+        Write-Host "Found Discord path at $fullDiscordPath"
         break
     }
 }
@@ -20,10 +25,6 @@ if ($firewallRuleExists)
     Write-Host "Removed old firewall rule"
     Remove-NetFirewallRule -DisplayName $displayName
 }
-
-$displayName = "Block Discord from contacting Spotify"
-$description = "Blocks discord from contacting spotify so it can't pause your music. Created automatically by Discord Anti-Pauser."
-$spotifyServerAddress = "35.186.224.24"
 
 New-NetFirewallRule -DisplayName $displayName -Description $description -Direction Outbound -LocalPort Any -RemoteAddress $spotifyServerAddress -Action Block -Program $fullDiscordPath
 Write-Host "Created firewall rule"

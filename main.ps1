@@ -1,12 +1,27 @@
-$discordPath = "%USERPROFILE%\AppData\Local\Discord\app-1.0.9151\Discord.exe"
-$displayName = "Block Discord from contacting Spotify"
+$discordPath = "$env:localappdata\Discord"
+$directories = Get-ChildItem -Path $discordPath -Directory
 
-$firewallRuleExists = Get-NetFirewallRule -DisplayName $displayName
-if ($firewallRuleExists)
+foreach ($dir in $directories)
 {
-	Write-Host "Removed old firewall rule"
-	Remove-NetFirewallRule -DisplayName $displayName
+    # checks if the directories
+    $empty = (Get-ChildItem -Path $dir.FullName -Recurse -Directory | Measure-Object | Select-Object -ExpandProperty Count) -eq 0
+    # if the directory isn't empty, it is the path in which Discord is stored in
+    if (!($empty))
+    {
+        $fullDiscordPath = $discordPath + $dir + "\Discord.exe"
+        break
+    }
 }
 
-New-NetFirewallRule -DisplayName $displayName -Description "Blocks discord from contacting spotify so it can't pause your music. Created automatically by Discord Anti-Pauser." -Direction Outbound -LocalPort Any -RemoteAddress "35.186.224.24" -Action Block -Program $discordPath
+$displayName = "Block Discord from contacting Spotify"
+
+# 2> $null redirects any errors to be sent to hell (null) so no stinky error pops up
+$firewallRuleExists = Get-NetFirewallRule -DisplayName $displayName 2> $null
+if ($firewallRuleExists)
+{
+    Write-Host "Removed old firewall rule"
+    Remove-NetFirewallRule -DisplayName $displayName
+}
+
+New-NetFirewallRule -DisplayName $displayName -Description "Blocks discord from contacting spotify so it can't pause your music. Created automatically by Discord Anti-Pauser." -Direction Outbound -LocalPort Any -RemoteAddress "35.186.224.24" -Action Block -Program $fullDiscordPath
 Write-Host "Created firewall rule"

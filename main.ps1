@@ -7,7 +7,7 @@ $spotifyServerAddress = "35.186.224.24"
 
 foreach ($dir in $directories)
 {
-    # checks if the directories
+    # checks if the child count of a directory is equal to 0
     $empty = (Get-ChildItem -Path $dir.FullName -Recurse -Directory | Measure-Object | Select-Object -ExpandProperty Count) -eq 0
     # if the directory isn't empty, it is the path in which Discord is stored in
     if (!($empty))

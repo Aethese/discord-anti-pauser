@@ -1,3 +1,6 @@
+# check if admin because we require elevated permissions
+#Requires -RunAsAdministrator
+
 $discordPath = "$env:localappdata\Discord"
 $directories = Get-ChildItem -Path $discordPath -Directory
 
@@ -33,8 +36,9 @@ if ($firewallRuleExists)
     Write-Host "Removed old firewall rule"
 }
 
-# sometimes LocalPort causes issues, so I am no offering a solution that doesn't use it. the old preserved code can still be seen below
-# New-NetFirewallRule -DisplayName $displayName -Description $description -Direction Outbound -LocalPort Any -RemoteAddress $spotifyServerAddress -Action Block -Program $fullDiscordPath
+New-NetFirewallRule -DisplayName $displayName -Description $description -Direction Outbound -LocalPort Any -RemoteAddress $spotifyServerAddress -Action Block -Program $fullDiscordPath
 
-New-NetFirewallRule -DisplayName $displayName -Description $description -Direction Outbound -RemoteAddress $spotifyServerAddress -Action Block -Program $fullDiscordPath
+# NOTE: sometimes LocalPort causes issues, so I am no offering a solution that doesn't use it. this temp solution can be seen below
+#New-NetFirewallRule -DisplayName $displayName -Description $description -Direction Outbound -RemoteAddress $spotifyServerAddress -Action Block -Program $fullDiscordPath
+
 Write-Host "Created firewall rule"

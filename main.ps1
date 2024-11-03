@@ -6,8 +6,8 @@ $directories = Get-ChildItem -Path $discordPath -Directory
 
 $currentDate = (Get-Date).ToString("yyyy/MM/dd")
 $displayName = "Block Discord from contacting Spotify"
-$description = "Blocks discord from contacting spotify so it can't pause your music. Created automatically by Discord Anti-Pauser at $currentDate."
-$spotifyServerAddress = "35.186.224.24"
+$description = "Blocks discord from contacting spotify so it can't pause your music. Created automatically by Discord Anti-Pauser on $currentDate."
+$spotifyServerAddress = "35.186.224.24" # pause API is usually https://api.spotify.com/v1/me/player/pause
 
 foreach ($dir in $directories)
 {
@@ -37,9 +37,13 @@ if ($firewallRuleExists)
     Write-Host "Removed old firewall rule"
 }
 
-New-NetFirewallRule -DisplayName $displayName -Description $description -Direction Outbound -LocalPort Any -RemoteAddress $spotifyServerAddress -Action Block -Program $fullDiscordPath
-
-# NOTE: sometimes LocalPort causes issues, so I am no offering a solution that doesn't use it. this temp solution can be seen below
-#New-NetFirewallRule -DisplayName $displayName -Description $description -Direction Outbound -RemoteAddress $spotifyServerAddress -Action Block -Program $fullDiscordPath
+New-NetFirewallRule -DisplayName $displayName `
+                    -Description $description `
+                    -Direction Outbound `
+                    -Action Block `
+                    -RemoteAddress $spotifyServerAddress `
+                    -RemotePort 443 `
+                    -Protocol TCP `
+                    -Program $fullDiscordPath
 
 Write-Host "Created firewall rule"

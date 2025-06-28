@@ -44,6 +44,7 @@ New-NetFirewallRule -DisplayName $displayName `
                     -RemoteAddress $spotifyServerAddress `
                     -RemotePort 443 `
                     -Protocol TCP `
+                    -Profile Public,Domain,Private `
                     -Program $fullDiscordPath
 
 Write-Host "Created firewall rule"
